@@ -20,15 +20,15 @@ services:
   core:
     container_name: maim-bot-core
     #### prod ####
-    image: sengokucola/maibot:latest
+    image: chenflxs/maibot:latest
     # image: infinitycat/maibot:latest
     #### dev ####
     # image: sengokucola/maibot:dev
     # image: infinitycat/maibot:dev
     environment:
       - TZ=Asia/Shanghai
-#      - EULA_AGREE=99f08e0cab0190de853cb6af7d64d4de # 同意EULA
-#      - PRIVACY_AGREE=9943b855e72199d0f5016ea39052f1b6 # 同意EULA
+      - EULA_AGREE=99f08e0cab0190de853cb6af7d64d4de # 同意EULA
+      - PRIVACY_AGREE=9943b855e72199d0f5016ea39052f1b6 # 同意EULA
 #    ports:
 #      - "8000:8000"
     volumes:
@@ -39,25 +39,25 @@ services:
       - ./data/MaiMBot/plugins:/MaiMBot/plugins # 插件目录
       - ./data/MaiMBot/logs:/MaiMBot/logs # 日志目录
       - site-packages:/usr/local/lib/python3.13/site-packages # 持久化Python包
-    restart: always
+    restart: on-failure:3
     networks:
       - maim_bot
-  napcat:
-    environment:
-      - NAPCAT_UID=1000
-      - NAPCAT_GID=1000
-      - TZ=Asia/Shanghai
-    ports:
-      - "6099:6099"
-    volumes:
-      - ./docker-config/napcat:/app/napcat/config # 持久化napcat配置文件
-      - ./data/qq:/app/.config/QQ # 持久化QQ本体
-      - ./data/MaiMBot:/MaiMBot/data # 共享目录
-    container_name: maim-bot-napcat
-    restart: always
-    image: mlikiowa/napcat-docker:latest
-    networks:
-      - maim_bot
+  # napcat:
+  #   environment:
+  #     - NAPCAT_UID=1000
+  #     - NAPCAT_GID=1000
+  #     - TZ=Asia/Shanghai
+  #   ports:
+  #     - "6099:6099"
+  #   volumes:
+  #     - ./docker-config/napcat:/app/napcat/config # 持久化napcat配置文件
+  #     - ./data/qq:/app/.config/QQ # 持久化QQ本体
+  #     - ./data/MaiMBot:/MaiMBot/data # 共享目录
+  #   container_name: maim-bot-napcat
+  #   restart: always
+  #   image: mlikiowa/napcat-docker:latest
+  #   networks:
+  #     - maim_bot
   sqlite-web:
     # 注意：coleifer/sqlite-web 镜像不支持arm64
     image: coleifer/sqlite-web
